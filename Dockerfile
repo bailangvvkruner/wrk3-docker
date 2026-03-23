@@ -24,6 +24,10 @@ RUN set -eux \
     # set -eux \
     && git clone https://github.com/cyoab/wrk3.git --recursive --branch main --depth 1 \
     && cd wrk3 \
+    # 修改 build.zig 添加 LTO 和 strip 支持
+    && sed -i '/b.installArtifact(exe);/i\
+    exe.want_lto = true;\
+    exe.root_module.strip = true;' build.zig \
     # 显示环境信息用于调试
     && echo "=== 构建环境信息 ===" \
     && pwd \
@@ -47,6 +51,7 @@ RUN set -eux \
     && du -b ./zig-out/bin/wrk3 \
     && echo "剥离调试信息后:" \
     && echo "=== 编译完成，已启用 LTO 和 strip ===" \
+    # && echo "=== 编译完成 (LTO + strip 已内置) ===" \
     # && echo "=== 剥离调试信息 ===" \
     # && strip -v --strip-all ./zig-out/bin/wrk3 \
     # && du -b ./zig-out/bin/wrk3 \
