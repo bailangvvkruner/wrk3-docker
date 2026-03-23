@@ -36,7 +36,7 @@ RUN set -eux \
     # The binary is at zig-out/bin/wrk3.
     # && zig build -Doptimize=ReleaseFast \
     # 内联优化
-    && zig build -Doptimize=ReleaseFast -Dlto=true
+    && zig build -Doptimize=ReleaseFast -Dlto=true \
     # 使用系统OpenSSL库进行动态编译
     # && make -j$(nproc) STATIC=0 WITH_OPENSSL=/usr \
     # && echo "=== 动态编译成功，生成二进制文件 ===" \
