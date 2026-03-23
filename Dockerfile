@@ -11,18 +11,8 @@ RUN set -eux \
     && cd /tmp \
     && apk add --no-cache --no-scripts --virtual .build-deps \
     git \
-    # make \
-    # gcc \
-    # musl-dev \
-    # build-base \
-    # libbsd-dev \
-    # zlib-dev \
-    # perl \
-    # binutils \
-    # upx \
-    # openssl \
-    # openssl-dev \
-    # openssl-libs-static \
+    # strip
+    binutils \
     zig \
     # 尝试安装 upx，如果不可用则继续（某些架构可能不支持）
     \
