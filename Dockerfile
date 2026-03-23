@@ -36,7 +36,14 @@ RUN set -eux \
     # The binary is at zig-out/bin/wrk3.
     # && zig build -Doptimize=ReleaseFast \
     # 内联优化
-    && zig build -Doptimize=ReleaseFast -Dlto=true \
+    # && zig build -Doptimize=ReleaseFast -Dlto=true \
+    # 多核编译 + 极限优化
+    && ZIG_GLOBAL_CACHE_DIR=/tmp/zig-cache zig build \
+        -Doptimize=ReleaseFast \
+        -Dstrip=true \
+        -Dlto=true \
+        --prominent-compile-errors \
+        -j$(nproc) \
     # 使用系统OpenSSL库进行动态编译
     # && make -j$(nproc) STATIC=0 WITH_OPENSSL=/usr \
     # && echo "=== 动态编译成功，生成二进制文件 ===" \
@@ -45,6 +52,11 @@ RUN set -eux \
     && strip -v --strip-all ./zig-out/bin/wrk3 \
     && du -b ./zig-out/bin/wrk3 \
     && echo "剥离调试信息后:" \
+    && echo "=== 编译完成，已启用 LTO 和 strip ===" \
+    # && echo "=== 剥离调试信息 ===" \
+    # && strip -v --strip-all ./zig-out/bin/wrk3 \
+    # && du -b ./zig-out/bin/wrk3 \
+    # && echo "剥离调试信息后:" \
     # && upx --best --lzma ./wrk \
     && (upx --best --lzma ./zig-out/bin/wrk3 2>/dev/null || echo "upx compression skipped") \
     && du -b ./zig-out/bin/wrk3 \
