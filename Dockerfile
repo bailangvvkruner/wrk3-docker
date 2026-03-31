@@ -38,8 +38,9 @@ RUN set -eux \
     # && make -j$(nproc) STATIC=1 WITH_OPENSSL=/usr \
     # && echo "=== 静态编译成功，生成二进制文件 ===" \
     # The binary is at zig-out/bin/wrk3.
-    # 多核编译 (wrk3 的 build.zig 只支持 -Doptimize)
+    # 多核编译，指定通用 x86_64 目标，避免 native 导致的指令集不兼容
     && ZIG_GLOBAL_CACHE_DIR=/tmp/zig-cache zig build -j$(nproc) \
+        -Dtarget=x86_64-linux-musl \
         -Doptimize=ReleaseFast \
     # 使用系统OpenSSL库进行动态编译
     # && make -j$(nproc) STATIC=0 WITH_OPENSSL=/usr \
